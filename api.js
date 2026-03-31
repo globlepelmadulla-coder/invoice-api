@@ -18,9 +18,17 @@ const pool = mysql.createPool(config.mysqlDB);
 
 // Middleware to handle ngrok warning
 app.use((req, res, next) => {
-    // Skip ngrok warning page
     res.setHeader('ngrok-skip-browser-warning', 'true');
     next();
+});
+
+// Root health check endpoint (for Pxxl App)
+app.get('/', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: 'Invoice API is running',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Get all invoices
@@ -63,7 +71,7 @@ app.get('/api/dashboard', (req, res) => {
         if (err) {
             res.status(500).json({ error: err.message });
         } else {
-            res.json({ success: true, ...results[0] });
+            res.json({ success: true, total: results[0].total, total_amount: results[0].total_amount });
         }
     });
 });
@@ -73,6 +81,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀 Invoice API Server Running`);
     console.log(`📍 URL: http://0.0.0.0:${PORT}`);
     console.log(`📋 Endpoints:`);
+    console.log(`   GET /`);
     console.log(`   GET /api/invoices`);
     console.log(`   GET /api/invoices/:id`);
     console.log(`   GET /api/invoices/count`);
