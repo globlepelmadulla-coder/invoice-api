@@ -69,9 +69,9 @@ app.get('/api/dashboard', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀 Invoice API Server Running`);
-    console.log(`📍 URL: http://localhost:${PORT}`);
+    console.log(`📍 URL: http://0.0.0.0:${PORT}`);
     console.log(`📋 Endpoints:`);
     console.log(`   GET /api/invoices`);
     console.log(`   GET /api/invoices/:id`);
